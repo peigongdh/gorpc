@@ -28,8 +28,8 @@ func init() {
 }
 
 // global jaeger objects for framework
-var JaegerSvr = &Jaeger {
-	opts : &plugin.Options{},
+var JaegerSvr = &Jaeger{
+	opts: &plugin.Options{},
 }
 
 type jaegerCarrier map[string][]byte
@@ -49,7 +49,7 @@ func (m jaegerCarrier) ForeachKey(handler func(key, val string) error) error {
 // OpenTracingClientInterceptor packaging jaeger tracer as a client interceptor
 func OpenTracingClientInterceptor(tracer opentracing.Tracer, spanName string) interceptor.ClientInterceptor {
 
-	return func (ctx context.Context, req, rsp interface{}, ivk interceptor.Invoker) error {
+	return func(ctx context.Context, req, rsp interface{}, ivk interceptor.Invoker) error {
 
 		//var parentCtx opentracing.SpanContext
 		//
@@ -85,7 +85,7 @@ func OpenTracingServerInterceptor(tracer opentracing.Tracer, spanName string) in
 		if err != nil && err != opentracing.ErrSpanContextNotFound {
 			return nil, errors.New(fmt.Sprintf("tracer extract error : %v", err))
 		}
-		serverSpan := tracer.StartSpan(spanName, ext.RPCServerOption(spanContext),ext.SpanKindRPCServer)
+		serverSpan := tracer.StartSpan(spanName, ext.RPCServerOption(spanContext), ext.SpanKindRPCServer)
 		defer serverSpan.Finish()
 
 		ctx = opentracing.ContextWithSpan(ctx, serverSpan)
@@ -98,8 +98,8 @@ func OpenTracingServerInterceptor(tracer opentracing.Tracer, spanName string) in
 }
 
 // Init implements the initialization of the jaeger configuration when the framework is loaded
-func Init(tracingSvrAddr string, opts ... plugin.Option) (opentracing.Tracer, error) {
-	return initJaeger(tracingSvrAddr, JaegerClientName, opts ...)
+func Init(tracingSvrAddr string, opts ...plugin.Option) (opentracing.Tracer, error) {
+	return initJaeger(tracingSvrAddr, JaegerClientName, opts...)
 }
 
 func (j *Jaeger) Init(opts ...plugin.Option) (opentracing.Tracer, error) {
@@ -112,21 +112,21 @@ func (j *Jaeger) Init(opts ...plugin.Option) (opentracing.Tracer, error) {
 		return nil, errors.New("jaeger init error, traingSvrAddr is empty")
 	}
 
-	return initJaeger(j.opts.TracingSvrAddr, JaegerServerName, opts ...)
+	return initJaeger(j.opts.TracingSvrAddr, JaegerServerName, opts...)
 
 }
 
-func initJaeger(tracingSvrAddr string, jaegerServiceName string, opts ... plugin.Option) (opentracing.Tracer, error) {
+func initJaeger(tracingSvrAddr string, jaegerServiceName string, opts ...plugin.Option) (opentracing.Tracer, error) {
 	cfg := &config.Configuration{
-		Sampler : &config.SamplerConfig{
-			Type : "const",  // Fixed sampling
-			Param : 1,       // 1= full sampling, 0= no sampling
+		Sampler: &config.SamplerConfig{
+			Type:  "const", // Fixed sampling
+			Param: 1,       // 1= full sampling, 0= no sampling
 		},
-		Reporter : &config.ReporterConfig{
-			LogSpans: true,
+		Reporter: &config.ReporterConfig{
+			LogSpans:           true,
 			LocalAgentHostPort: tracingSvrAddr,
 		},
-		ServiceName : jaegerServiceName,
+		ServiceName: jaegerServiceName,
 	}
 
 	tracer, _, err := cfg.NewTracer()

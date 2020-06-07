@@ -3,10 +3,10 @@ package stream
 import "context"
 
 type ServerStream struct {
-	ctx context.Context
-	Method string // 方法名
+	ctx     context.Context
+	Method  string // 方法名
 	RetCode uint32 // 返回码 0—成功 非0-失败
-	RetMsg  string  // 返回信息 OK-成功，失败返回具体信息
+	RetMsg  string // 返回信息 OK-成功，失败返回具体信息
 }
 
 const ServerStreamKey = StreamContextKey("GORPC_SERVER_STREAM")
@@ -27,10 +27,9 @@ func (ss *ServerStream) WithMethod(method string) *ServerStream {
 
 func (ss *ServerStream) Clone() *ServerStream {
 	return &ServerStream{
-		Method : ss.Method,
+		Method: ss.Method,
 	}
 }
-
 
 func NewServerStream(ctx context.Context) (context.Context, *ServerStream) {
 	var ss *ServerStream
@@ -39,7 +38,7 @@ func NewServerStream(ctx context.Context) (context.Context, *ServerStream) {
 		ss = v.(*ServerStream)
 	} else {
 		ss = &ServerStream{
-			ctx : ctx,
+			ctx: ctx,
 		}
 	}
 	valueCtx := context.WithValue(ctx, ServerStreamKey, ss)

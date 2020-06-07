@@ -20,11 +20,11 @@ func ClientIntercept(ctx context.Context, req, rsp interface{}, ceps []ClientInt
 }
 
 func getInvoker(cur int, ceps []ClientInterceptor, ivk Invoker) Invoker {
-	if cur == len(ceps) - 1 {
+	if cur == len(ceps)-1 {
 		return ivk
 	}
 
-	return func(ctx context.Context, req , rsp interface{} ) error {
+	return func(ctx context.Context, req, rsp interface{}) error {
 		return ceps[cur+1](ctx, req, rsp, getInvoker(cur+1, ceps, ivk))
 	}
 }
@@ -39,11 +39,11 @@ func ServerIntercept(ctx context.Context, req interface{}, ceps []ServerIntercep
 }
 
 func getHandler(cur int, ceps []ServerInterceptor, handler Handler) Handler {
-	if cur == len(ceps) - 1 {
+	if cur == len(ceps)-1 {
 		return handler
 	}
 
-	return func(ctx context.Context, req interface{} ) (interface{}, error) {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return ceps[cur+1](ctx, req, getHandler(cur+1, ceps, handler))
 	}
 }

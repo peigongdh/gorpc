@@ -8,7 +8,7 @@ import (
 
 var NewTestServerTransport = func() ServerTransport {
 	return &serverTransport{
-		opts : &ServerTransportOptions{Address:"127.0.0.1"},
+		opts: &ServerTransportOptions{Address: "127.0.0.1"},
 	}
 }
 
@@ -20,5 +20,3 @@ func TestGetServerTransport(t *testing.T) {
 	serverTransport = GetServerTransport("test")
 	assert.Equal(t, serverTransport, DefaultServerTransport)
 }
-
-

@@ -9,7 +9,7 @@ import (
 func TestClientMetadata(t *testing.T) {
 	ctx := context.Background()
 	md := ClientMetadata(ctx)
-	assert.NotNil(t,md)
+	assert.NotNil(t, md)
 
 	md["test"] = []byte("test_client_metadata")
 	newCtx := WithClientMetadata(ctx, md)
@@ -20,7 +20,7 @@ func TestClientMetadata(t *testing.T) {
 func TestServerMetadata(t *testing.T) {
 	ctx := context.Background()
 	md := ServerMetadata(ctx)
-	assert.NotNil(t,md)
+	assert.NotNil(t, md)
 
 	md["test"] = []byte("test_server_metadata")
 	newCtx := WithServerMetadata(ctx, md)

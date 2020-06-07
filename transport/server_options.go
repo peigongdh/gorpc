@@ -6,19 +6,19 @@ import (
 )
 
 // ServerTransportOptions includes all ServerTransport parameter options
-type ServerTransportOptions struct{
-	Address string // address，e.g: ip://127.0.0.1：8080
-	Network string  // network type
-	Protocol string  // protocol type, e.g. : proto、json
-	Timeout time.Duration  // transport layer request timeout ，default: 2 min
-	Handler Handler		   // handler
-	SerializationType string   // serialization type, e.g : proto、json、msgpack
-	KeepAlivePeriod time.Duration // keepalive period
+type ServerTransportOptions struct {
+	Address           string        // address，e.g: ip://127.0.0.1：8080
+	Network           string        // network type
+	Protocol          string        // protocol type, e.g. : proto、json
+	Timeout           time.Duration // transport layer request timeout ，default: 2 min
+	Handler           Handler       // handler
+	SerializationType string        // serialization type, e.g : proto、json、msgpack
+	KeepAlivePeriod   time.Duration // keepalive period
 }
 
 // Handler defines a common interface for handling packets
 type Handler interface {
-	Handle (context.Context, []byte) ([]byte, error)
+	Handle(context.Context, []byte) ([]byte, error)
 }
 
 // Use the Options mode to wrap the ServerTransportOptions

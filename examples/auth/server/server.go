@@ -13,10 +13,9 @@ import (
 	"github.com/lubanproj/gorpc/testdata"
 )
 
-
 func main() {
 
-	af := func(ctx context.Context) (context.Context, error){
+	af := func(ctx context.Context) (context.Context, error) {
 		md := metadata.ServerMetadata(ctx)
 
 		if len(md) == 0 {
@@ -37,7 +36,7 @@ func main() {
 		gorpc.WithTimeout(time.Millisecond * 2000),
 		gorpc.WithInterceptor(auth.BuildAuthInterceptor(af)),
 	}
-	s := gorpc.NewServer(opts ...)
+	s := gorpc.NewServer(opts...)
 	if err := s.RegisterService("/helloworld.Greeter", new(testdata.Service)); err != nil {
 		panic(err)
 	}

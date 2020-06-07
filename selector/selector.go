@@ -6,12 +6,10 @@ type Selector interface {
 }
 
 type defaultSelector struct {
-
 }
 
 // Options defines Selector options
 type Options struct {
-
 }
 
 type Option func(*Options)
@@ -40,9 +38,8 @@ func (d *defaultSelector) Select(serviceName string) (string, error) {
 
 // GetSelector get a selector by a given selector name
 func GetSelector(name string) Selector {
-	if selector ,ok := selectorMap[name]; ok {
+	if selector, ok := selectorMap[name]; ok {
 		return selector
 	}
 	return DefaultSelector
 }
-

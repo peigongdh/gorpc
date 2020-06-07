@@ -36,7 +36,7 @@ func (c *clientTransport) SendUdpReq(ctx context.Context, req []byte) ([]byte, e
 	}
 
 	recvBuf := make([]byte, 65536)
-	n, err := conn.Read(recvBuf);
+	n, err := conn.Read(recvBuf)
 	if err != nil {
 		return nil, err
 	}

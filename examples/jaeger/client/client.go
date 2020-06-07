@@ -8,7 +8,6 @@ import (
 	"github.com/lubanproj/gorpc/client"
 	"github.com/lubanproj/gorpc/plugin/jaeger"
 	"github.com/lubanproj/gorpc/testdata"
-
 )
 
 func main() {
@@ -18,7 +17,7 @@ func main() {
 		panic(err)
 	}
 
-	opts := []client.Option {
+	opts := []client.Option{
 		client.WithTarget("127.0.0.1:8000"),
 		client.WithNetwork("tcp"),
 		client.WithTimeout(2000 * time.Millisecond),
@@ -30,8 +29,8 @@ func main() {
 	}
 	rsp := &testdata.HelloReply{}
 
-	for i:= 1; i< 200; i ++ {
-		err = c.Call(context.Background(), "/helloworld.Greeter/SayHello", req, rsp, opts ...)
+	for i := 1; i < 200; i++ {
+		err = c.Call(context.Background(), "/helloworld.Greeter/SayHello", req, rsp, opts...)
 		fmt.Println(rsp.Msg, err)
 		time.Sleep(100 * time.Millisecond)
 	}

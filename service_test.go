@@ -7,7 +7,7 @@ import (
 
 func TestServe(t *testing.T) {
 
-	opts := &ServerOptions {
+	opts := &ServerOptions{
 		network: "tcp",
 		address: "127.0.0.1:8000",
 		timeout: time.Millisecond * 1000,

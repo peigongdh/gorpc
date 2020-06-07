@@ -12,9 +12,8 @@ import (
 )
 
 func init() {
-	ghttp.HandleFunc("GET","/hello", sayHello)
+	ghttp.HandleFunc("GET", "/hello", sayHello)
 }
-
 
 func main() {
 	opts := []gorpc.ServerOption{
@@ -23,7 +22,7 @@ func main() {
 		gorpc.WithNetwork("tcp"),
 		gorpc.WithTimeout(time.Millisecond * 2000),
 	}
-	s := gorpc.NewServer(opts ...)
+	s := gorpc.NewServer(opts...)
 	s.ServeHttp()
 }
 

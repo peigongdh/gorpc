@@ -13,10 +13,10 @@ var (
 
 type PoolConn struct {
 	net.Conn
-	c *channelPool
-	unusable bool		// if unusable is true, the conn should be closed
-	mu sync.RWMutex
-	t time.Time  // connection idle time
+	c           *channelPool
+	unusable    bool // if unusable is true, the conn should be closed
+	mu          sync.RWMutex
+	t           time.Time     // connection idle time
 	dialTimeout time.Duration // connection timeout duration
 }
 
@@ -68,12 +68,11 @@ func (p *PoolConn) Write(b []byte) (int, error) {
 }
 
 func (c *channelPool) wrapConn(conn net.Conn) *PoolConn {
-	p := &PoolConn {
-		c : c,
-		t : time.Now(),
+	p := &PoolConn{
+		c:           c,
+		t:           time.Now(),
 		dialTimeout: c.dialTimeout,
 	}
 	p.Conn = conn
 	return p
 }
-

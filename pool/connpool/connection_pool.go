@@ -15,7 +15,7 @@ type Pool interface {
 }
 
 type pool struct {
-	opts *Options
+	opts  *Options
 	conns *sync.Map
 }
 
@@ -43,16 +43,16 @@ var DefaultPool = NewConnPool()
 
 func NewConnPool(opt ...Option) *pool {
 	// default options
-	opts := &Options {
-		maxCap: 1000,
+	opts := &Options{
+		maxCap:      1000,
 		idleTimeout: 1 * time.Minute,
 		dialTimeout: 200 * time.Millisecond,
 	}
 	m := &sync.Map{}
 
-	p := &pool {
-		conns : m,
-		opts : opts,
+	p := &pool{
+		conns: m,
+		opts:  opts,
 	}
 	for _, o := range opt {
 		o(p.opts)
@@ -82,22 +82,21 @@ func (p *pool) Get(ctx context.Context, network string, address string) (net.Con
 
 type channelPool struct {
 	net.Conn
-	initialCap int  // initial capacity
-	maxCap int      // max capacity
-	maxIdle int     // max idle conn number
-	idleTimeout time.Duration  // idle timeout
-	dialTimeout time.Duration  // dial timeout
-	Dial func(context.Context) (net.Conn, error)
-	conns chan *PoolConn
-	mu sync.RWMutex
+	initialCap  int           // initial capacity
+	maxCap      int           // max capacity
+	maxIdle     int           // max idle conn number
+	idleTimeout time.Duration // idle timeout
+	dialTimeout time.Duration // dial timeout
+	Dial        func(context.Context) (net.Conn, error)
+	conns       chan *PoolConn
+	mu          sync.RWMutex
 }
 
-
-func (p *pool) NewChannelPool(ctx context.Context, network string, address string) (*channelPool, error){
-	c := &channelPool {
+func (p *pool) NewChannelPool(ctx context.Context, network string, address string) (*channelPool, error) {
+	c := &channelPool{
 		initialCap: p.opts.initialCap,
-		maxCap: p.opts.maxCap,
-		Dial : func(ctx context.Context) (net.Conn, error) {
+		maxCap:     p.opts.maxCap,
+		Dial: func(ctx context.Context) (net.Conn, error) {
 			select {
 			case <-ctx.Done():
 				return nil, ctx.Err()
@@ -105,13 +104,13 @@ func (p *pool) NewChannelPool(ctx context.Context, network string, address strin
 			}
 
 			timeout := p.opts.dialTimeout
-			if t , ok := ctx.Deadline(); ok {
+			if t, ok := ctx.Deadline(); ok {
 				timeout = t.Sub(time.Now())
 			}
 
 			return net.DialTimeout(network, address, timeout)
 		},
-		conns : make(chan *PoolConn, p.opts.maxCap),
+		conns:       make(chan *PoolConn, p.opts.maxCap),
 		idleTimeout: p.opts.idleTimeout,
 		dialTimeout: p.opts.dialTimeout,
 	}
@@ -122,14 +121,14 @@ func (p *pool) NewChannelPool(ctx context.Context, network string, address strin
 	}
 
 	for i := 0; i < p.opts.initialCap; i++ {
-		conn , err := c.Dial(ctx);
+		conn, err := c.Dial(ctx)
 		if err != nil {
 			return nil, err
 		}
 		c.Put(c.wrapConn(conn))
 	}
 
-	c.RegisterChecker(3 * time.Second, c.Checker)
+	c.RegisterChecker(3*time.Second, c.Checker)
 	return c, nil
 }
 
@@ -138,22 +137,22 @@ func (c *channelPool) Get(ctx context.Context) (net.Conn, error) {
 		return nil, ErrConnClosed
 	}
 	select {
-		case pc := <-c.conns :
-			if pc == nil {
-				return nil, ErrConnClosed
-			}
+	case pc := <-c.conns:
+		if pc == nil {
+			return nil, ErrConnClosed
+		}
 
-			if pc.unusable {
-				return nil, ErrConnClosed
-			}
+		if pc.unusable {
+			return nil, ErrConnClosed
+		}
 
-			return pc, nil
-		default:
-			conn, err := c.Dial(ctx)
-			if err != nil {
-				return nil, err
-			}
-			return c.wrapConn(conn), nil
+		return pc, nil
+	default:
+		conn, err := c.Dial(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.wrapConn(conn), nil
 	}
 }
 
@@ -186,7 +185,7 @@ func (c *channelPool) Put(conn *PoolConn) error {
 	}
 
 	select {
-	case c.conns <- conn :
+	case c.conns <- conn:
 		return nil
 	default:
 		// 连接池满
@@ -208,10 +207,10 @@ func (c *channelPool) RegisterChecker(internal time.Duration, checker func(conn 
 
 			length := len(c.conns)
 
-			for i:=0; i < length; i++ {
+			for i := 0; i < length; i++ {
 
 				select {
-				case pc := <- c.conns :
+				case pc := <-c.conns:
 
 					if !checker(pc) {
 						pc.MarkUnusable()
@@ -230,7 +229,7 @@ func (c *channelPool) RegisterChecker(internal time.Duration, checker func(conn 
 	}()
 }
 
-func (c *channelPool) Checker (pc *PoolConn) bool {
+func (c *channelPool) Checker(pc *PoolConn) bool {
 
 	// check timeout
 	if pc.t.Add(c.idleTimeout).Before(time.Now()) {
@@ -255,7 +254,3 @@ func isConnAlive(conn net.Conn) bool {
 	conn.SetReadDeadline(time.Time{})
 	return true
 }
-
-
-
-

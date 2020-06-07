@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	opts := []client.Option {
+	opts := []client.Option{
 		client.WithNetwork("tcp"),
 		client.WithTimeout(2000 * time.Millisecond),
 		client.WithSelectorName(consul.Name),
@@ -23,6 +23,6 @@ func main() {
 	rsp := &testdata.HelloReply{}
 
 	consul.Init("localhost:8500")
-	err := c.Call(context.Background(), "/helloworld.Greeter/SayHello", req, rsp, opts ...)
+	err := c.Call(context.Background(), "/helloworld.Greeter/SayHello", req, rsp, opts...)
 	fmt.Println(rsp.Msg, err)
 }

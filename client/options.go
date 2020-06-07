@@ -10,18 +10,18 @@ import (
 
 // Options defines the client call parameters
 type Options struct {
-	serviceName string // service name
-	method string // method name
-	target string 	// format e.g.:  ip:port 127.0.0.1:8000
-	timeout time.Duration  // timeout
-	network string  // network type, e.g.:  tcp、udp
-	protocol   string  // protocol type , e.g. : proto、json
-	serializationType string // seralization type , e.g. : proto、msgpack
-	transportOpts transport.ClientTransportOptions
-	interceptors []interceptor.ClientInterceptor
-	selectorName string      // service discovery name, e.g. : consul、zookeeper、etcd
-	perRPCAuth []auth.PerRPCAuth  // authentication information required for each RPC call
-	transportAuth auth.TransportAuth
+	serviceName       string        // service name
+	method            string        // method name
+	target            string        // format e.g.:  ip:port 127.0.0.1:8000
+	timeout           time.Duration // timeout
+	network           string        // network type, e.g.:  tcp、udp
+	protocol          string        // protocol type , e.g. : proto、json
+	serializationType string        // seralization type , e.g. : proto、msgpack
+	transportOpts     transport.ClientTransportOptions
+	interceptors      []interceptor.ClientInterceptor
+	selectorName      string            // service discovery name, e.g. : consul、zookeeper、etcd
+	perRPCAuth        []auth.PerRPCAuth // authentication information required for each RPC call
+	transportAuth     auth.TransportAuth
 }
 
 type Option func(*Options)
@@ -82,7 +82,7 @@ func WithInterceptor(interceptors ...interceptor.ClientInterceptor) Option {
 
 func WithPerRPCAuth(rpcAuth auth.PerRPCAuth) Option {
 	return func(o *Options) {
-		o.perRPCAuth = append(o.perRPCAuth,rpcAuth)
+		o.perRPCAuth = append(o.perRPCAuth, rpcAuth)
 	}
 }
 
@@ -91,4 +91,3 @@ func WithTransportAuth(transportAuth auth.TransportAuth) Option {
 		o.transportAuth = transportAuth
 	}
 }
-

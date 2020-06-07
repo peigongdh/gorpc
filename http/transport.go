@@ -31,7 +31,7 @@ var DefaultHttpServerTransport = NewHttpServerTransport()
 // Use the singleton pattern to create a server transport
 var NewHttpServerTransport = func() *httpServerTransport {
 	return &httpServerTransport{
-		opts : &transport.ServerTransportOptions{},
+		opts: &transport.ServerTransportOptions{},
 	}
 }
 
@@ -48,7 +48,6 @@ func (s *httpServerTransport) ListenAndServe(ctx context.Context, opts ...transp
 	if err != nil {
 		return err
 	}
-
 
 	s.Server.Handler = DefaultRouter
 	go func() {
@@ -68,5 +67,3 @@ func HandleFunc(method, path string, handler func(http.ResponseWriter, *http.Req
 
 	return nil
 }
-
-

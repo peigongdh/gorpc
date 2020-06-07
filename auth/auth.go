@@ -13,15 +13,13 @@ type TransportAuth interface {
 
 	// ServerHandshake defines a common interface for server handshakes
 	ServerHandshake(conn net.Conn) (net.Conn, AuthInfo, error)
-
 }
 
 // PerRPCAuth defines a common interface for single RPC call authentication
 type PerRPCAuth interface {
 
 	// GetMetadata fetch custom metadata from the context
-	GetMetadata(ctx context.Context, uri ... string) (map[string]string, error)
-
+	GetMetadata(ctx context.Context, uri ...string) (map[string]string, error)
 }
 
 // AuthInfo defines the protocol type for authentication

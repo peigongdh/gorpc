@@ -4,7 +4,6 @@ import "github.com/opentracing/opentracing-go"
 
 // Plugin defines the standard for all plug-ins
 type Plugin interface {
-
 }
 
 // ResolverPlugin defines the standard for all server discovery plug-ins
@@ -30,10 +29,10 @@ func Register(name string, plugin Plugin) {
 
 // Options for all plug-ins
 type Options struct {
-	SvrAddr string     // server address
-	Services []string   // service arrays
-	SelectorSvrAddr string  // server discovery address ，e.g. consul server address
-	TracingSvrAddr string   // tracing server address，e.g. jaeger server address
+	SvrAddr         string   // server address
+	Services        []string // service arrays
+	SelectorSvrAddr string   // server discovery address ，e.g. consul server address
+	TracingSvrAddr  string   // tracing server address，e.g. jaeger server address
 }
 
 // Option provides operations on Options
@@ -66,7 +65,3 @@ func WithTracingSvrAddr(addr string) Option {
 		o.TracingSvrAddr = addr
 	}
 }
-
-
-
-

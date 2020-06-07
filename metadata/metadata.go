@@ -2,8 +2,8 @@ package metadata
 
 import "context"
 
-type clientMD struct {}
-type serverMD struct {}
+type clientMD struct{}
+type serverMD struct{}
 
 type clientMetadata map[string][]byte
 
@@ -20,7 +20,7 @@ func ClientMetadata(ctx context.Context) clientMetadata {
 }
 
 // WithClientMetadata creates a new context with the specified metadata
-func WithClientMetadata(ctx context.Context, metadata map[string][]byte) context.Context{
+func WithClientMetadata(ctx context.Context, metadata map[string][]byte) context.Context {
 	return context.WithValue(ctx, clientMD{}, clientMetadata(metadata))
 }
 
@@ -35,7 +35,6 @@ func ServerMetadata(ctx context.Context) serverMetadata {
 }
 
 // WithServerMetadata creates a new context with the specified metadata
-func WithServerMetadata(ctx context.Context, metadata map[string][]byte) context.Context{
+func WithServerMetadata(ctx context.Context, metadata map[string][]byte) context.Context {
 	return context.WithValue(ctx, serverMD{}, serverMetadata(metadata))
 }
-

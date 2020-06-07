@@ -3,7 +3,6 @@ package testdata
 import "context"
 
 type Service struct {
-
 }
 
 type HelloRequest struct {
@@ -16,7 +15,7 @@ type HelloReply struct {
 
 func (s *Service) SayHello(ctx context.Context, req *HelloRequest) (*HelloReply, error) {
 	rsp := &HelloReply{
-		Msg : "world",
+		Msg: "world",
 	}
 
 	return rsp, nil

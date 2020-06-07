@@ -13,7 +13,6 @@ func TestRegisterCodec(t *testing.T) {
 	assert.Equal(t, codec, nil)
 }
 
-
 func TestDefaultCodec_Decode(t *testing.T) {
 
 }

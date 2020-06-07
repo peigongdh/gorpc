@@ -69,14 +69,14 @@ func TestWithPlugin(t *testing.T) {
 	fServerops := WithPlugin("test")
 	fServerops(&serverops)
 	assert.Equal(t, []string{"test"}, serverops.pluginNames)
-	serverops.pluginNames=[]string(nil)
-	fServerops = WithPlugin("test","another_test")
+	serverops.pluginNames = []string(nil)
+	fServerops = WithPlugin("test", "another_test")
 	fServerops(&serverops)
-	assert.Equal(t, []string{"test","another_test"}, serverops.pluginNames)
-	serverops.pluginNames=[]string(nil)
+	assert.Equal(t, []string{"test", "another_test"}, serverops.pluginNames)
+	serverops.pluginNames = []string(nil)
 	fServeropsNew := WithPlugin()
 	fServeropsNew(&serverops)
-	assert.Equal(t,[]string(nil), serverops.pluginNames)
+	assert.Equal(t, []string(nil), serverops.pluginNames)
 }
 
 func TestWithInterceptor(t *testing.T) {

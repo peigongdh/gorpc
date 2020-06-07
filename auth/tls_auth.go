@@ -16,7 +16,7 @@ import (
 // and implements TransportAuth, PerRPCAuth, AuthInfo
 type tlsAuth struct {
 	config *tls.Config
-	state tls.ConnectionState
+	state  tls.ConnectionState
 }
 
 // AuthType returns the protocol name
@@ -27,7 +27,7 @@ func (t *tlsAuth) AuthType() string {
 // NewClientTLSAuthFromFile instantiates client-side authentication information
 // with certificates and service names
 func NewClientTLSAuthFromFile(certFile, serverName string) (TransportAuth, error) {
-	cert , err := ioutil.ReadFile(certFile)
+	cert, err := ioutil.ReadFile(certFile)
 	if err != nil {
 		return nil, err
 	}
@@ -35,11 +35,11 @@ func NewClientTLSAuthFromFile(certFile, serverName string) (TransportAuth, error
 	if !cp.AppendCertsFromPEM(cert) {
 		return nil, codes.ClientCertFailError
 	}
-	conf := &tls.Config {
+	conf := &tls.Config{
 		ServerName: serverName,
-		RootCAs: cp,
+		RootCAs:    cp,
 	}
-	return &tlsAuth{config : conf}, nil
+	return &tlsAuth{config: conf}, nil
 }
 
 // NewServerTLSAuthFromFile generates server-side authentication information
@@ -50,9 +50,9 @@ func NewServerTLSAuthFromFile(certFile, keyFile string) (TransportAuth, error) {
 		return nil, codes.ClientCertFailError
 	}
 	conf := &tls.Config{
-		Certificates:[]tls.Certificate{cert},
+		Certificates: []tls.Certificate{cert},
 	}
-	return &tlsAuth{config : conf}, nil
+	return &tlsAuth{config: conf}, nil
 }
 
 // ClientHandshake implements the client's handshake
@@ -73,15 +73,15 @@ func (t *tlsAuth) ClientHandshake(ctx context.Context, authority string, rawConn
 		errChan <- conn.Handshake()
 	}()
 	select {
-	case err := <- errChan :
+	case err := <-errChan:
 		if err != nil {
 			return nil, nil, err
 		}
-	case <- ctx.Done() :
+	case <-ctx.Done():
 		return nil, nil, ctx.Err()
 	}
 
-	return WrapConn(rawConn,conn) , &tlsAuth{state : conn.ConnectionState()}, nil
+	return WrapConn(rawConn, conn), &tlsAuth{state: conn.ConnectionState()}, nil
 }
 
 // the ServerHandshake implements the server handshake
@@ -90,7 +90,7 @@ func (t *tlsAuth) ServerHandshake(rawConn net.Conn) (net.Conn, AuthInfo, error) 
 	if err := conn.Handshake(); err != nil {
 		return nil, nil, err
 	}
-	return WrapConn(rawConn,conn), &tlsAuth{state : conn.ConnectionState()}, nil
+	return WrapConn(rawConn, conn), &tlsAuth{state: conn.ConnectionState()}, nil
 }
 
 func cloneTLSConfig(cfg *tls.Config) *tls.Config {
@@ -100,7 +100,6 @@ func cloneTLSConfig(cfg *tls.Config) *tls.Config {
 
 	return cfg.Clone()
 }
-
 
 // WrapConn synthesizes two conn's into one conn
 func WrapConn(rawConn, newConn net.Conn) net.Conn {
@@ -122,5 +121,3 @@ type wrapperConn struct {
 	// `Conn` collides with `net.Conn`.
 	sysConn
 }
-
-

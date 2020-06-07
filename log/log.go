@@ -8,13 +8,13 @@ import (
 )
 
 const (
-	NULL = iota
-	TRACE = 1
-	DEBUG = 2
-	INFO = 3
+	NULL     = iota
+	TRACE    = 1
+	DEBUG    = 2
+	INFO     = 3
 	WARNGING = 4
-	ERROR = 5
-	FATAL = 6
+	ERROR    = 5
+	FATAL    = 6
 )
 
 const DefaultLogPath = "gorpc.log"
@@ -33,10 +33,9 @@ type Log interface {
 	Warningf(format string, v ...interface{})
 	Errorf(format string, v ...interface{})
 	Fatalf(format string, v ...interface{})
-
 }
 
-type logger struct{
+type logger struct {
 	*log.Logger
 	options *Options
 }
@@ -48,41 +47,40 @@ func init() {
 	if err != nil {
 		fmt.Println("open file, error : ", err)
 	}
-	DefaultLog = &logger {
-		Logger : log.New(logFile, "", log.LstdFlags|log.Lshortfile),
-		options : &Options{
+	DefaultLog = &logger{
+		Logger: log.New(logFile, "", log.LstdFlags|log.Lshortfile),
+		options: &Options{
 			level: 2,
 		},
 	}
 }
 
-
 type Level int
 
 func (level Level) String() string {
 	switch level {
-	case TRACE :
+	case TRACE:
 		return "trace"
-	case DEBUG :
+	case DEBUG:
 		return "debug"
-	case INFO :
+	case INFO:
 		return "info"
-	case WARNGING :
+	case WARNGING:
 		return "warning"
-	case ERROR :
+	case ERROR:
 		return "error"
-	case FATAL :
+	case FATAL:
 		return "fatal"
-	default :
+	default:
 		return "unkown"
 	}
 	return "unknown"
 }
 
 type Options struct {
-	path string `default:"../log/gorpc.log"`   // 日志文件路径前缀，文件名为 gorpc.4019-09-46.log
-	frame string `default:"../log/frame.log"`  // 框架 panic 日志打印路径，默认 ../log/frame.log
-	level Level `default:"debug"`          // 日志级别，默认为 debug
+	path  string `default:"../log/gorpc.log"` // 日志文件路径前缀，文件名为 gorpc.4019-09-46.log
+	frame string `default:"../log/frame.log"` // 框架 panic 日志打印路径，默认 ../log/frame.log
+	level Level  `default:"debug"`            // 日志级别，默认为 debug
 }
 
 type Option func(*Options)
@@ -123,15 +121,15 @@ func (log *logger) Trace(v ...interface{}) {
 		return
 	}
 	data := log.Prefix() + fmt.Sprint(v...)
-	Output(log, 4,"[TRACE] ", data)
+	Output(log, 4, "[TRACE] ", data)
 }
 
 func (log *logger) Tracef(format string, v ...interface{}) {
 	if log.options.level > TRACE {
 		return
 	}
-	data := log.Prefix() + fmt.Sprintf(format,v...)
-	Output(log, 4,"[TRACE] ", data)
+	data := log.Prefix() + fmt.Sprintf(format, v...)
+	Output(log, 4, "[TRACE] ", data)
 }
 
 // Debug print debug log
@@ -149,15 +147,15 @@ func (log *logger) Debug(v ...interface{}) {
 		return
 	}
 	data := log.Prefix() + fmt.Sprint(v...)
-	Output(log, 4,"[DEBUG] ", data)
+	Output(log, 4, "[DEBUG] ", data)
 }
 
 func (log *logger) Debugf(format string, v ...interface{}) {
 	if log.options.level > DEBUG {
 		return
 	}
-	data := log.Prefix() + fmt.Sprintf(format,v...)
-	Output(log, 4,"[DEBUG] ", data)
+	data := log.Prefix() + fmt.Sprintf(format, v...)
+	Output(log, 4, "[DEBUG] ", data)
 }
 
 // Info print info log
@@ -175,15 +173,15 @@ func (log *logger) Info(v ...interface{}) {
 		return
 	}
 	data := log.Prefix() + fmt.Sprint(v...)
-	Output(log, 4,"[INFO] ", data)
+	Output(log, 4, "[INFO] ", data)
 }
 
 func (log *logger) Infof(format string, v ...interface{}) {
 	if log.options.level > INFO {
 		return
 	}
-	data := log.Prefix() + fmt.Sprintf(format,v...)
-	Output(log, 4,"[INFO] ", data)
+	data := log.Prefix() + fmt.Sprintf(format, v...)
+	Output(log, 4, "[INFO] ", data)
 }
 
 // Warning print warning log
@@ -201,15 +199,15 @@ func (log *logger) Warning(v ...interface{}) {
 		return
 	}
 	data := log.Prefix() + fmt.Sprint(v...)
-	Output(log, 4,"[WARNING] ", data)
+	Output(log, 4, "[WARNING] ", data)
 }
 
 func (log *logger) Warningf(format string, v ...interface{}) {
 	if log.options.level > WARNGING {
 		return
 	}
-	data := log.Prefix() + fmt.Sprintf(format,v...)
-	Output(log, 4,"[WARNING] ", data)
+	data := log.Prefix() + fmt.Sprintf(format, v...)
+	Output(log, 4, "[WARNING] ", data)
 }
 
 // Error print error log
@@ -227,15 +225,15 @@ func (log *logger) Error(v ...interface{}) {
 		return
 	}
 	data := log.Prefix() + fmt.Sprint(v...)
-	Output(log, 4,"[ERROR] ", data)
+	Output(log, 4, "[ERROR] ", data)
 }
 
 func (log *logger) Errorf(format string, v ...interface{}) {
 	if log.options.level > ERROR {
 		return
 	}
-	data := log.Prefix() + fmt.Sprintf(format,v...)
-	Output(log, 4,"[ERROR] ", data)
+	data := log.Prefix() + fmt.Sprintf(format, v...)
+	Output(log, 4, "[ERROR] ", data)
 }
 
 // Fatal print fatal log
@@ -253,15 +251,15 @@ func (log *logger) Fatal(v ...interface{}) {
 		return
 	}
 	data := log.Prefix() + fmt.Sprint(v...)
-	Output(log, 4,"[FATAL] ", data)
+	Output(log, 4, "[FATAL] ", data)
 }
 
 func (log *logger) Fatalf(format string, v ...interface{}) {
 	if log.options.level > FATAL {
 		return
 	}
-	data := log.Prefix() + fmt.Sprintf(format,v...)
-	Output(log, 4,"[FATAL] ", data)
+	data := log.Prefix() + fmt.Sprintf(format, v...)
+	Output(log, 4, "[FATAL] ", data)
 }
 
 // call Output to write log

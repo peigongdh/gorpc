@@ -20,7 +20,7 @@ func TestCall(t *testing.T) {
 			gorpc.WithSerializationType("msgpack"),
 			gorpc.WithTimeout(time.Millisecond * 2000),
 		}
-		s := gorpc.NewServer(serverOpts ...)
+		s := gorpc.NewServer(serverOpts...)
 		if err := s.RegisterService("helloworld.Greeter", new(testdata.Service)); err != nil {
 			panic(err)
 		}
@@ -29,13 +29,13 @@ func TestCall(t *testing.T) {
 			s.Serve()
 		}()
 
-		<- ch
+		<-ch
 		s.Close()
 	}()
 
 	time.Sleep(1000 * time.Millisecond)
 
-	opts := []Option {
+	opts := []Option{
 		WithTarget("127.0.0.1:8001"),
 		WithNetwork("tcp"),
 		WithTimeout(2000 * time.Millisecond),
@@ -47,10 +47,9 @@ func TestCall(t *testing.T) {
 	}
 	rsp := &testdata.HelloReply{}
 
-	err := c.Call(context.Background(), "/helloworld.Greeter/SayHello", req, rsp, opts ...)
+	err := c.Call(context.Background(), "/helloworld.Greeter/SayHello", req, rsp, opts...)
 
 	close(ch)
 
 	assert.Nil(t, err)
 }
-

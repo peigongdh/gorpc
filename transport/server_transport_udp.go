@@ -8,10 +8,9 @@ import (
 	"time"
 )
 
-
 func (s *serverTransport) ListenAndServeUdp(ctx context.Context, opts ...ServerTransportOption) error {
 
-	conn , err := net.ListenPacket(s.opts.Network, s.opts.Address)
+	conn, err := net.ListenPacket(s.opts.Network, s.opts.Address)
 	defer conn.Close()
 
 	buffer := make([]byte, 65536)
@@ -25,7 +24,7 @@ func (s *serverTransport) ListenAndServeUdp(ctx context.Context, opts ...ServerT
 		// check upstream ctx is done
 		select {
 		case <-ctx.Done():
-			return ctx.Err();
+			return ctx.Err()
 		default:
 		}
 
@@ -59,19 +58,16 @@ func (s *serverTransport) ListenAndServeUdp(ctx context.Context, opts ...ServerT
 
 		}()
 
-
 	}
-
 
 	return nil
 
 }
 
-
 func (s *serverTransport) handleUdpConn(ctx context.Context, conn net.PacketConn, addr net.Addr, req []byte) error {
 
-	rsp , err := s.handle(ctx, req)
-	if err != nil{
+	rsp, err := s.handle(ctx, req)
+	if err != nil {
 		return err
 	}
 

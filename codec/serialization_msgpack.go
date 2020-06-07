@@ -12,8 +12,7 @@ func init() {
 }
 
 // MsgpackSerialization implemented msgpack serialization
-type MsgpackSerialization struct {}
-
+type MsgpackSerialization struct{}
 
 func (c *MsgpackSerialization) Marshal(v interface{}) ([]byte, error) {
 	if v == nil {

@@ -8,5 +8,5 @@ import (
 
 func TestInit(t *testing.T) {
 	err := Init("localhost:8500")
-	assert.Nil(t,err)
+	assert.Nil(t, err)
 }

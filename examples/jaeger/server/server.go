@@ -11,7 +11,6 @@ import (
 	_ "net/http/pprof"
 )
 
-
 func main() {
 
 	pprof()
@@ -25,7 +24,7 @@ func main() {
 		gorpc.WithTracingSpanName("helloworld.Greeter"),
 		gorpc.WithPlugin(jaeger.Name),
 	}
-	s := gorpc.NewServer(opts ...)
+	s := gorpc.NewServer(opts...)
 	if err := s.RegisterService("helloworld.Greeter", new(testdata.Service)); err != nil {
 		panic(err)
 	}

@@ -6,15 +6,15 @@ import (
 )
 
 type roundRobinBalancer struct {
-	pickers *sync.Map
-	duration time.Duration  // time duration to update again
+	pickers  *sync.Map
+	duration time.Duration // time duration to update again
 }
 
 type roundRobinPicker struct {
-	length int       // service nodes length
-	lastUpdateTime time.Time  // last update time
-	duration time.Duration    // time duration to update again
-	lastIndex int    // last accessed index
+	length         int           // service nodes length
+	lastUpdateTime time.Time     // last update time
+	duration       time.Duration // time duration to update again
+	lastIndex      int           // last accessed index
 }
 
 func (rp *roundRobinPicker) pick(nodes []*Node) *Node {
@@ -30,7 +30,7 @@ func (rp *roundRobinPicker) pick(nodes []*Node) *Node {
 		rp.lastIndex = 0
 	}
 
-	if rp.lastIndex == len(nodes) - 1 {
+	if rp.lastIndex == len(nodes)-1 {
 		rp.lastIndex = 0
 		return nodes[0]
 	}
@@ -46,21 +46,21 @@ func (r *roundRobinBalancer) Balance(serviceName string, nodes []*Node) *Node {
 	if p, ok := r.pickers.Load(serviceName); !ok {
 		picker = &roundRobinPicker{
 			lastUpdateTime: time.Now(),
-			duration : r.duration,
-			length : len(nodes),
+			duration:       r.duration,
+			length:         len(nodes),
 		}
 	} else {
 		picker = p.(*roundRobinPicker)
 	}
 
 	node := picker.pick(nodes)
-	r.pickers.Store(serviceName,picker)
+	r.pickers.Store(serviceName, picker)
 	return node
 }
 
 func newRoundRobinBalancer() *roundRobinBalancer {
 	return &roundRobinBalancer{
-		pickers : new(sync.Map),
-		duration : 3 * time.Minute,
+		pickers:  new(sync.Map),
+		duration: 3 * time.Minute,
 	}
 }

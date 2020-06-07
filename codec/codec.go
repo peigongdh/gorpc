@@ -21,14 +21,14 @@ const Version = 0
 
 // FrameHeader describes the header structure of a data frame
 type FrameHeader struct {
-	Magic uint8    // magic
-	Version uint8  // version
-	MsgType uint8  // msg type e.g. :   0x0: general req,  0x1: heartbeat
-	ReqType uint8  // request type e.g. :   0x0: send and receive,   0x1: send but not receive,  0x2: client stream request, 0x3: server stream request, 0x4: bidirectional streaming request
-	CompressType uint8 // compression or not :  0x0: not compression,  0x1: compression
-	StreamID uint16    // stream ID
-	Length uint32  	// total packet length
-	Reserved uint32  // 4 bytes reserved
+	Magic        uint8  // magic
+	Version      uint8  // version
+	MsgType      uint8  // msg type e.g. :   0x0: general req,  0x1: heartbeat
+	ReqType      uint8  // request type e.g. :   0x0: send and receive,   0x1: send but not receive,  0x2: client stream request, 0x3: server stream request, 0x4: bidirectional streaming request
+	CompressType uint8  // compression or not :  0x0: not compression,  0x1: compression
+	StreamID     uint16 // stream ID
+	Length       uint32 // total packet length
+	Reserved     uint32 // 4 bytes reserved
 }
 
 // GetCodec get a Codec by a codec name
@@ -45,7 +45,7 @@ var codecMap = make(map[string]Codec)
 var DefaultCodec = NewCodec()
 
 // NewCodec returns a globally unique codec
-var NewCodec = 	func () Codec {
+var NewCodec = func() Codec {
 	return &defaultCodec{}
 }
 
@@ -67,12 +67,12 @@ func (c *defaultCodec) Encode(data []byte) ([]byte, error) {
 	buffer := bytes.NewBuffer(make([]byte, 0, totalLen))
 
 	frame := FrameHeader{
-		Magic : Magic,
-		Version : Version,
-		MsgType : 0x0,
-		ReqType : 0x0,
+		Magic:        Magic,
+		Version:      Version,
+		MsgType:      0x0,
+		ReqType:      0x0,
 		CompressType: 0x0,
-		Length: uint32(len(data)),
+		Length:       uint32(len(data)),
 	}
 
 	if err := binary.Write(buffer, binary.BigEndian, frame.Magic); err != nil {
@@ -114,8 +114,7 @@ func (c *defaultCodec) Encode(data []byte) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
-
-func (c *defaultCodec) Decode(frame []byte) ([]byte,error) {
+func (c *defaultCodec) Decode(frame []byte) ([]byte, error) {
 	return frame[FrameHeadLen:], nil
 }
 
@@ -129,10 +128,10 @@ func upperLimit(val int) uint32 {
 }
 
 var bufferPool = &sync.Pool{
-	New : func() interface {} {
-		return &cachedBuffer {
-			Buffer : proto.Buffer{},
-			lastMarshaledSize : 16,
+	New: func() interface{} {
+		return &cachedBuffer{
+			Buffer:            proto.Buffer{},
+			lastMarshaledSize: 16,
 		}
 	},
 }

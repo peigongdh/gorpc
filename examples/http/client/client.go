@@ -12,8 +12,8 @@ func main() {
 		fmt.Println(err)
 	}
 
-    defer rsp.Body.Close()
-	
-    rspbody, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+
+	rspbody, err := ioutil.ReadAll(rsp.Body)
 	fmt.Println(string(rspbody), err)
 }

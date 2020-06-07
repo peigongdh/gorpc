@@ -19,7 +19,7 @@ import (
 
 // global client interface
 type Client interface {
-	Invoke(ctx context.Context, req , rsp interface{}, path string, opts ...Option) error
+	Invoke(ctx context.Context, req, rsp interface{}, path string, opts ...Option) error
 }
 
 // use a global client
@@ -27,8 +27,8 @@ var DefaultClient = New()
 
 var New = func() *defaultClient {
 	return &defaultClient{
-		opts : &Options{
-			protocol : "proto",
+		opts: &Options{
+			protocol: "proto",
 		},
 	}
 }
@@ -43,11 +43,11 @@ func (c *defaultClient) Call(ctx context.Context, servicePath string, req interf
 
 	// reflection calls need to be serialized using msgpack
 	callOpts := make([]Option, 0, len(opts)+1)
-	callOpts = append(callOpts, opts ...)
+	callOpts = append(callOpts, opts...)
 	callOpts = append(callOpts, WithSerializationType(codec.MsgPack))
 
 	// servicePath example : /helloworld.Greeter/SayHello
-	err := c.Invoke(ctx, req, rsp, servicePath, callOpts ...)
+	err := c.Invoke(ctx, req, rsp, servicePath, callOpts...)
 	if err != nil {
 		return err
 	}
@@ -55,8 +55,7 @@ func (c *defaultClient) Call(ctx context.Context, servicePath string, req interf
 	return nil
 }
 
-
-func (c *defaultClient) Invoke(ctx context.Context, req , rsp interface{}, path string, opts ...Option) error {
+func (c *defaultClient) Invoke(ctx context.Context, req, rsp interface{}, path string, opts ...Option) error {
 
 	for _, o := range opts {
 		o(c.opts)
@@ -71,7 +70,7 @@ func (c *defaultClient) Invoke(ctx context.Context, req , rsp interface{}, path 
 	// set serviceName, method
 	newCtx, clientStream := stream.NewClientStream(ctx)
 
-	serviceName, method , err := utils.ParseServicePath(path)
+	serviceName, method, err := utils.ParseServicePath(path)
 	if err != nil {
 		return err
 	}
@@ -110,7 +109,7 @@ func (c *defaultClient) invoke(ctx context.Context, req, rsp interface{}) error 
 	}
 
 	clientTransport := c.NewClientTransport()
-	clientTransportOpts := []transport.ClientTransportOption {
+	clientTransportOpts := []transport.ClientTransportOption{
 		transport.WithServiceName(c.opts.serviceName),
 		transport.WithClientTarget(c.opts.target),
 		transport.WithClientNetwork(c.opts.network),
@@ -118,7 +117,7 @@ func (c *defaultClient) invoke(ctx context.Context, req, rsp interface{}) error 
 		transport.WithSelector(selector.GetSelector(c.opts.selectorName)),
 		transport.WithTimeout(c.opts.timeout),
 	}
-	frame, err := clientTransport.Send(ctx, reqbody, clientTransportOpts ...)
+	frame, err := clientTransport.Send(ctx, reqbody, clientTransportOpts...)
 	if err != nil {
 		return err
 	}
@@ -162,16 +161,9 @@ func addReqHeader(ctx context.Context, client *defaultClient, payload []byte) *p
 
 	request := &protocol.Request{
 		ServicePath: servicePath,
-		Payload: payload,
-		Metadata: md,
+		Payload:     payload,
+		Metadata:    md,
 	}
 
 	return request
 }
-
-
-
-
-
-
-
