@@ -75,6 +75,7 @@ func (d *pbSerialization) Marshal(v interface{}) ([]byte, error) {
 }
 
 func (d *pbSerialization) Unmarshal(data []byte, v interface{}) error {
+	// FIXME: error if payload empty
 	if data == nil || len(data) == 0 {
 		return errors.New("unmarshal nil or empty bytes")
 	}
