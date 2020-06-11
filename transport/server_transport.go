@@ -202,6 +202,7 @@ func (s *serverTransport) handle(ctx context.Context, frame []byte) ([]byte, err
 		return nil, err
 	}
 
+	log.Debugf("serverTransport", s.opts.Handler)
 	rspbuf, err := s.opts.Handler.Handle(ctx, reqbuf)
 	if err != nil {
 		log.Errorf("server Handle error: %v", err)
